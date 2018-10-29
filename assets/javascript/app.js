@@ -8,14 +8,16 @@ function gifButtons() {
         // Add text to the button
         // append this button to #gifButtonContain
         var button = $("<button>");
-        button.attr("data-game", games[i])
+        button.addClass("game");
+        button.attr("data-game", games[i]);
         button.text(games[i]);
         $("#gifButtonContain").append(button);
     }
 };
 
 function newButton() {
-    $("#addGif").on("click", function () {
+    $("#addGame").on("click", function () {
+        event.preventDefault();
         var game = $("#gameInput").val().trim();
         if (game == "") {
             return false;
@@ -28,7 +30,7 @@ function newButton() {
 }
 
 $(document).ready(function () {
-    $("button").on("click", function () {
+    $(document).on("click", ".button", function () {
         console.log("hello");
         var games = $(this).attr("data-game");
         var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + games + "&api_key=mLBbgDZopvSPGQ3u9oTGV2OAVaNDzi9X&limit=5";
@@ -51,11 +53,13 @@ $(document).ready(function () {
                     var gifRating = $("<p>").text("Rating: " + results[i].rating);
                     gifDiv.append(gifRating);
                     var gifImage = $("<img>");
-                    gifImage.attr("src", results[i].images.fixed_height_still.url);
+                    gifImage.attr("src", results[i].images.fixed_height.url);
+                    gifImage.attr("data-animate", results[i].images.fixed_height.url)
                     gifDiv.append(gifImage);
                     $("#gifImages").prepend(gifDiv);
                 }
             });
 
     });
+    newButton();
 });
